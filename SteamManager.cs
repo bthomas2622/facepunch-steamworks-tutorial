@@ -424,6 +424,12 @@ public class SteamManager : MonoBehaviour
         }
     }
 
+    // Allows you to open friends list where game invites will have lobby id
+    public void OpenFriendOverlayForGameInvite() 
+    {
+        SteamFriends.OpenGameInviteOverlay(currentLobby.Id);
+    }
+
     private void ReconcileMissedAchievements()
     {
         AchievementStatus localAchievementStatus = SaveSystem.LoadAchievementStatus();
