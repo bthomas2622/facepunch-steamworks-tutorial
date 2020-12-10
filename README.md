@@ -38,44 +38,44 @@ In the `Awake()` function I setup my Singleton, and initialize my Steam Client w
 
 
 `public void Awake()
+{
+    if (Instance == null)
     {
-        if (Instance == null)
+        daRealOne = true;
+        DontDestroyOnLoad(gameObject);
+        Instance = this;
+        PlayerName = "";
+        try
         {
-            daRealOne = true;
-            DontDestroyOnLoad(gameObject);
-            Instance = this;
-            PlayerName = "";
-            try
+            // Create client
+            SteamClient.Init(gameAppId, true);
+            if (!SteamClient.IsValid)
             {
-                // Create client
-                SteamClient.Init(gameAppId, true);
-                if (!SteamClient.IsValid)
-                {
-                    Debug.Log("Steam client not valid");
-                    throw new Exception();
-                }
-                PlayerName = SteamClient.Name;
-                PlayerSteamId = SteamClient.SteamId;
-                playerSteamIdString = PlayerSteamId.ToString();
-                activeUnrankedLobbies = new List<Lobby>();
-                activeRankedLobbies = new List<Lobby>();
-                connectedToSteam = true;
-                Debug.Log("Steam initialized: " + PlayerName);
+                Debug.Log("Steam client not valid");
+                throw new Exception();
             }
-            catch (Exception e)
-            {
-                connectedToSteam = false;
-                playerSteamIdString = "NoSteamId";
-                Debug.Log("Error connecting to Steam");
-                Debug.Log(e);
-            }
+            PlayerName = SteamClient.Name;
+            PlayerSteamId = SteamClient.SteamId;
+            playerSteamIdString = PlayerSteamId.ToString();
+            activeUnrankedLobbies = new List<Lobby>();
+            activeRankedLobbies = new List<Lobby>();
+            connectedToSteam = true;
+            Debug.Log("Steam initialized: " + PlayerName);
         }
-        else if (Instance != this)
+        catch (Exception e)
         {
-            Destroy(gameObject);
+            connectedToSteam = false;
+            playerSteamIdString = "NoSteamId";
+            Debug.Log("Error connecting to Steam");
+            Debug.Log(e);
         }
-    }`
-
+    }
+    else if (Instance != this)
+    {
+        Destroy(gameObject);
+    }
+}
+`
 The Facepunch.Steamworks architecture mainly centers around creating “events/actions” when a Steam thing happens. You write functions to handle these events and define them in your Awake() or Start() method. You need to run “SteamClient.RunCallbacks()” in your “Update()” method to field these Steam events. 
 
 Below you can see all the callbacks I’ve defined to handle different Steam events around multiplayer, etc. 
