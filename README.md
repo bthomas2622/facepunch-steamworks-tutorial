@@ -36,8 +36,8 @@ I essentially managed all my Steamworks functions and statuses in a singleton cr
 
 In the `Awake()` function I setup my Singleton, and initialize my Steam Client with `SteamClient.Init`.
 
-`
-public void Awake()
+
+`public void Awake()
     {
         if (Instance == null)
         {
@@ -74,8 +74,7 @@ public void Awake()
         {
             Destroy(gameObject);
         }
-    }
-`
+    }`
 
 The Facepunch.Steamworks architecture mainly centers around creating “events/actions” when a Steam thing happens. You write functions to handle these events and define them in your Awake() or Start() method. You need to run “SteamClient.RunCallbacks()” in your “Update()” method to field these Steam events. 
 
