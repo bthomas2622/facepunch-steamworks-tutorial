@@ -78,10 +78,11 @@ public void Awake()
 }
 ```
 
-The Facepunch.Steamworks architecture mainly centers around creating “events/actions” when a Steam thing happens. You write functions to handle these events and define them in your Awake() or Start() method. You need to run “SteamClient.RunCallbacks()” in your “Update()” method to field these Steam events. 
+The Facepunch.Steamworks architecture mainly centers around creating “events/actions” when a Steam thing happens. You write functions to handle these events and define them in your `Awake()` or `Start()` method. You need to run `SteamClient.RunCallbacks()` in your `Update()` method to field these Steam events. 
 
 Below you can see all the callbacks I’ve defined to handle different Steam events around multiplayer, etc. 
 
+```
    void Start()
     {
         // Callbacks
@@ -101,9 +102,11 @@ Below you can see all the callbacks I’ve defined to handle different Steam eve
     {
         SteamClient.RunCallbacks();
     } 
+```
 
-And then in either your OnDisable, OnDestroy, or OnApplicationQuit you will want to shut down the Steam client. I use “daRealOne” bool to make sure I only shut down the SteamClient when my singleton is being destroyed, not when I am destroying an instance because it is not my singleton. 
+And then in either your `OnDisable`, `OnDestroy`, or `OnApplicationQuit` you will want to shut down the Steam client. I use `daRealOne` bool to make sure I only shut down the SteamClient when my singleton is being destroyed, not when I am destroying an instance because it is not my singleton. 
 
+```
    void OnDisable()
     {
         if (daRealOne)
@@ -112,21 +115,23 @@ And then in either your OnDisable, OnDestroy, or OnApplicationQuit you will want
             SteamClient.Shutdown();
         }
     }
+```
 
-Core Loop
+## Core Loop
 
 I’m not gonna go through every single callback I’ve defined. I recommend looking at the full example code to explore each one. But I will examine an example core loop of:
 
-Create multiplayer lobby
-Another player joins lobby after searching for it
-All lobby players accept P2P session with each other
-Game starts and players send packets to each other
-Lobby cleanup
+1. Create multiplayer lobby
+2. Another player joins lobby after searching for it
+3. All lobby players accept P2P session with each other
+4. Game starts and players send packets to each other
+5. Lobby cleanup
 
-Create Multiplayer Lobby
+### Create Multiplayer Lobby
 
-Creating a lobby is done with “await SteamMatchmaking.CreateLobbyAsync(2)” where 2 is the max number of players the lobby can hold. If the output of this async method “.HasValue” then the lobby was correctly created. A Steamworks Lobby object has a bunch of parameters that can be edited, as well as custom parameters that can be set with “SetData”. 
+Creating a lobby is done with `await SteamMatchmaking.CreateLobbyAsync(2)` where 2 is the max number of players the lobby can hold. If the output of this async method `.HasValue` then the lobby was correctly created. A Steamworks Lobby object has a bunch of parameters that can be edited, as well as custom parameters that can be set with `SetData`. 
 
+```
 public async Task<bool> CreateLobby(int lobbyParameters)
     {
         try
@@ -155,17 +160,19 @@ public async Task<bool> CreateLobby(int lobbyParameters)
             return false;
         }
     }
+```
 
 Another player joins lobby after searching for it
 
 The way I populate lobbies a player can join in my game is:
 
-“Lobby[] lobbies = await SteamMatchmaking.LobbyList”
+`Lobby[] lobbies = await SteamMatchmaking.LobbyList`
 
 In my game I display these lobbies as options to the player looking for a game, but you could handle all this in the background if you wanted to go with a more matchmaking approach. 
 
-I refined my lobby search with parameters like “WithMaxResults” and “WithKeyValue” to separate my ranked and unranked lobbies. 
+I refined my lobby search with parameters like `WithMaxResults` and `WithKeyValue` to separate my ranked and unranked lobbies. 
 
+```
 public async Task<bool> RefreshMultiplayerLobbies(bool ranked)
     {
         try
@@ -203,23 +210,27 @@ public async Task<bool> RefreshMultiplayerLobbies(bool ranked)
             return true;
         }
     }
+```
 
 Join lobby with:
 
-       RoomEnter joinedLobbySuccess = await joinedLobby.Join();
-        if (joinedLobbySuccess != RoomEnter.Success)
-        {
-            Debug.Log("failed to join lobby");
-        }
+```
+    RoomEnter joinedLobbySuccess = await joinedLobby.Join();
+    if (joinedLobbySuccess != RoomEnter.Success)
+    {
+        Debug.Log("failed to join lobby");
+    }
+```
 
 All lobby players accept P2P session with each other
 
 I kinda stumbled into this implementation and my code has different ways of doing this. There are a lot of different callbacks that can be used for when a player joins a lobby. The main thing is the SteamIds need to be exchanged so that each player can call: 
 
-SteamNetworking.AcceptP2PSessionWithUser(opponentSteamId);
+`SteamNetworking.AcceptP2PSessionWithUser(opponentSteamId);`
 
-One of the ways I exchange SteamIds is with the OnLobbyMemberJoinedCallack. So the host gets the joining player SteamId and AcceptsP2P on it. And the person joining can AcceptP2P on Lobby.Owner.id.
+One of the ways I exchange SteamIds is with the `OnLobbyMemberJoinedCallack`. So the host gets the joining player SteamId and AcceptsP2P on it. And the person joining can AcceptP2P on `Lobby.Owner.id`.
 
+```
    void OnLobbyMemberJoinedCallback(Lobby lobby, Friend friend)
     {
         Debug.Log("someone else joined lobby");
@@ -230,17 +241,19 @@ One of the ways I exchange SteamIds is with the OnLobbyMemberJoinedCallack. So t
             AcceptP2P(OpponentSteamId);
         }
     }
+```
 
 Game starts and both players send packets to each other
 
-There are few ways for the host of a lobby to let other members know that it’s time to start the game. They can call “lobby.SetGameServer(PlayerSteamId);” and trigger everyone’s OnLobbyGameCreated callback.
+There are few ways for the host of a lobby to let other members know that it’s time to start the game. They can call `lobby.SetGameServer(PlayerSteamId);` and trigger everyone’s `OnLobbyGameCreated` callback.
 
-SteamMatchmaking.OnLobbyGameCreated += OnLobbyGameCreatedCallback;
+`SteamMatchmaking.OnLobbyGameCreated += OnLobbyGameCreatedCallback;`
 
 Or you could communicate with chat messages api, etc. 
 
 After the game has started I have a GameObject (not SteamManager.cs) in my game scene that receives and sends data packets. To receive data packets I use: 
 
+```
    void Awake()
     {
         // Check every 0.05 seconds for new packets
@@ -259,11 +272,13 @@ After the game has started I have a GameObject (not SteamManager.cs) in my game 
             }
         }
     }
+```
 
 And to send data packets I use: 
 
-SteamNetworking.SendP2PPacket(opponentSteamId, ConvertStringToByteArray(dataToSend));
+`SteamNetworking.SendP2PPacket(opponentSteamId, ConvertStringToByteArray(dataToSend));`
 
+```
    public void SendAdHocData(string adHocData)
     {
         if (!SteamManager.Instance.LobbyPartnerDisconnected)
@@ -280,9 +295,9 @@ SteamNetworking.SendP2PPacket(opponentSteamId, ConvertStringToByteArray(dataToSe
             }
         }
     }
+```
 
-
-Lobby Cleanup
+### Lobby Cleanup
 
 Lobby / Game Server are garbage collected automatically when both players call “Leave()” on a Steamworks Lobby object (which is cached in SteamManager singleton). This is why it’s important to call “leaveLobby” on onDestroy(), and when a player quits, and any other case that represents a player leaving a session. 
 
