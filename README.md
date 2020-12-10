@@ -54,7 +54,6 @@ public void Awake()
                     Debug.Log("Steam client not valid");
                     throw new Exception();
                 }
-
                 PlayerName = SteamClient.Name;
                 PlayerSteamId = SteamClient.SteamId;
                 playerSteamIdString = PlayerSteamId.ToString();
