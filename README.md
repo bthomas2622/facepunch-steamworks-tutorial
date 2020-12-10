@@ -32,9 +32,9 @@ Facepunch Install + Setup - https://wiki.facepunch.com/steamworks/Setting_Up
 
 ## Getting Started
 
-I essentially managed all my Steamworks functions and statuses in a singleton created at app startup called “SteamManager.cs”.
+I essentially managed all my Steamworks functions and statuses in a singleton created at app startup called **SteamManager.cs**.
 
-In the “Awake()” function I setup my Singleton, and initialize my Steam Client with “SteamClient.Init”
+In the `Awake()` function I setup my Singleton, and initialize my Steam Client with `SteamClient.Init`.
 
 `public void Awake()
     {
@@ -75,7 +75,8 @@ In the “Awake()” function I setup my Singleton, and initialize my Steam Clie
         {
             Destroy(gameObject);
         }
-    }`
+    }
+`
 
 The Facepunch.Steamworks architecture mainly centers around creating “events/actions” when a Steam thing happens. You write functions to handle these events and define them in your Awake() or Start() method. You need to run “SteamClient.RunCallbacks()” in your “Update()” method to field these Steam events. 
 
