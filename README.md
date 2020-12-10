@@ -9,26 +9,26 @@ You will need to know you’re way around some Unity C# and have some eagerness 
 Feel free to reach out with questions I am [@freebrunch](https://twitter.com/freebrunch) on Twitter.
 
 ### Links:
-1. Tutorial code
-2. Facepunch.Steamworks wiki
-3. Facepunch.Steamworks github
-4. Steamworks Docs
-5. Nectar of the Gods Steam page
+1. [Tutorial code](https://github.com/bthomas2622/facepunch-steamworks-tutorial)
+2. [Facepunch.Steamworks wiki](https://wiki.facepunch.com/steamworks/)
+3. [Facepunch.Steamworks github](https://github.com/Facepunch/Facepunch.Steamworks)
+4. [Steamworks Docs](https://partner.steamgames.com/doc/home)
+5. [Nectar of the Gods Steam page](https://store.steampowered.com/app/1421410/Nectar_of_the_Gods/)
 
-Nectar of the Gods was always going to be an online multiplayer game. I love multiplayer games and wanted to make something I could play with friends. But I had a few obstacles to overcome as a first time independent developer:
+[Nectar of the Gods](https://store.steampowered.com/app/1421410/Nectar_of_the_Gods/) was always going to be an online multiplayer game. I love multiplayer games and wanted to make something I could play with friends. But I had a few obstacles to overcome as a first time independent developer:
 
 1. I had never written any netcode.
 2. Unity networking support seemed extremely limited.
 3. I was hoping to do “Peer 2 Peer” networking rather than “Client Server” because I have no budget for dedicated servers and steady income to support them from an indie game can be elusive.
 4. My hope was to use something open source
 
-A lot of people in my initial research were recommending using Steamworks (link) to do the netcode heavy lifting. Steam offers free backend APIs via Steamworks to help you set up things like game lobbies, P2P packet management, etc. The downside was that I could only distribute my game through Steam to take advantage of this online implementation. This was a worth it tradeoff for me though because I was making a PC game, Steam is a great marketplace, and without much resources Steamworks was a life saver. 
+A lot of people in my initial research were recommending using [Steamworks Docs](https://partner.steamgames.com/doc/features/multiplayer) to do the netcode heavy lifting. Steam offers free backend APIs via Steamworks to help you set up things like game lobbies, P2P packet management, etc. The downside was that I could only distribute my game through Steam to take advantage of this online implementation. This was a worth it tradeoff for me though because I was making a PC game, Steam is a great marketplace, and without much resources Steamworks was a life saver. 
 
 Buuut Steamworks is written in C++, so to use it with Unity I would need to use a C# wrapper. And it appeared the latest and greatest Steamworks C# implementation was a MIT open source project created by Garry Newman (of Garry’s Mod) called “Facepunch.Steamworks”. The most recent release as of this writing was February 28, 2020 but it does seem to still be active with contributions. 
 
 ## Prerequisites 
-You will need valid Steam AppID by paying Steam app fee - https://partner.steamgames.com/doc/store/application
-Facepunch Install + Setup - https://wiki.facepunch.com/steamworks/Setting_Up
+1. You will need valid Steam AppID by [paying Steam app fee](https://partner.steamgames.com/doc/store/application)
+2. [Facepunch Install + Setup](https://wiki.facepunch.com/steamworks/Setting_Up)
 
 ## Getting Started
 
@@ -301,9 +301,9 @@ And to send data packets I use:
 
 Lobby / Game Server are garbage collected automatically when both players call “Leave()” on a Steamworks Lobby object (which is cached in SteamManager singleton). This is why it’s important to call “leaveLobby” on onDestroy(), and when a player quits, and any other case that represents a player leaving a session. 
 
-And that’s the core loop! Checkout the full boilerplate code in the github repo. It has things like inviting a friend to a game lobby, unlocking achievements, setting steam rich presence, etc. Things like achievements and rich presence also need to be configured on the Steam end of things. 
+And that’s the core loop! Checkout the [full boilerplate code](https://github.com/bthomas2622/facepunch-steamworks-tutorial) in the github repo. It has things like inviting a friend to a game lobby, unlocking achievements, setting steam rich presence, etc. Things like achievements and rich presence also need to be configured on the Steam end of things. 
 
-I hope this is helpful! Suggest edits to me @freebrunch on Twitter.
+I hope this is helpful! Suggest edits to me [@freebrunch](https://twitter.com/freebrunch) on Twitter.
 
-Plug for my game Nectar of the Gods on Steam. “An unquenchable multiplayer real-time strategy game where bugs clash over the sweet nectar of sugary beverages. From Beetle Brigade to Spidey Party, you will artfully master strengths and shortcomings to topple boba shops and coffee bars. The countertop mayhem has begun.”
+Plug for my game [Nectar of the Gods](https://store.steampowered.com/app/1421410/Nectar_of_the_Gods/) on Steam. **“An unquenchable multiplayer real-time strategy game where bugs clash over the sweet nectar of sugary beverages. From Beetle Brigade to Spidey Party, you will artfully master strengths and shortcomings to topple boba shops and coffee bars. The countertop mayhem has begun.”**
 
