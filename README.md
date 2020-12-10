@@ -36,7 +36,8 @@ I essentially managed all my Steamworks functions and statuses in a singleton cr
 
 In the `Awake()` function I setup my Singleton, and initialize my Steam Client with `SteamClient.Init`.
 
-`public void Awake()
+`
+public void Awake()
     {
         if (Instance == null)
         {
@@ -48,7 +49,6 @@ In the `Awake()` function I setup my Singleton, and initialize my Steam Client w
             {
                 // Create client
                 SteamClient.Init(gameAppId, true);
-
                 if (!SteamClient.IsValid)
                 {
                     Debug.Log("Steam client not valid");
