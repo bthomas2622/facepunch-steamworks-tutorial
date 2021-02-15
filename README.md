@@ -1,3 +1,7 @@
+### *SteamNetworkingSockets Update*
+
+Since making this tutorial, I switched my P2P netcode over from **SteamNetworking** to **SteamNetworkingSockets** as SteamNetworking is an older API being deprectated. See Steamworks networking APIs overview [here](https://partner.steamgames.com/doc/features/multiplayer/networking). See `SteamSocketStuff.cs` for SteamNetworkingSockets code implementation. Also see Facepunch ["Creating a Socket Server" Wiki Post](https://wiki.facepunch.com/steamworks/Creating_A_Socket_Server). 
+
 # A Unity tutorial for Facepunch Steamworks C# Wrapper
 
 This is a tutorial for how to use “Facepunch.Steamworks”, a Steamworks C# wrapper, to implement P2P multiplayer and other Steamworks features in a Unity game.
