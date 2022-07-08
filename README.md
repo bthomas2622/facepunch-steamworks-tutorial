@@ -4,7 +4,7 @@ Since making this tutorial, I switched my P2P netcode over from **SteamNetworkin
 
 # A Unity tutorial for Facepunch Steamworks C# Wrapper
 
-This is a tutorial for how to use “Facepunch.Steamworks”, a Steamworks C# wrapper, to implement P2P multiplayer and other Steamworks features in a Unity game.
+This is a tutorial for how to use “[Facepunch.Steamworks](https://github.com/Facepunch/Facepunch.Steamworks)”, a Steamworks C# wrapper, to implement P2P multiplayer and other Steamworks features in a Unity game.
 
 I found the Facepunch.Steamworks documentation to be very good, but found very few code examples on the internet so I wanted to write this in case it can be helpful for anyone as a jumping off point. 
 
